@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony Search Optimization 🎷</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-animation">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+
+    <div class="container">
+        <header class="hero-header">
+            <div class="hero-content">
+                <div class="title-section">
+                    <div class="icon-badge">🎷</div>
+                    <h1 class="main-title">
+                        <span class="title-harmony">Harmony</span>
+                        <span class="title-search">Search</span>
+                    </h1>
+                    <p class="tagline">Musical Improvisation Meets Optimization</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <aside class="control-panel glass-effect">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="panel-icon">⚙️</span>
+                        Configuration
+                    </h2>
+                </div>
+                <div class="controls-content">
+                    <div class="control-group featured">
+                        <label class="control-label">
+                            <span class="label-icon">🎯</span>
+                            Objective Function
+                        </label>
+                        <div class="select-wrapper">
+                            <select id="functionSelect" onchange="updateFormula()">
+                                <option value="sphere">Sphere Function</option>
+                                <option value="rastrigin">Rastrigin Function</option>
+                                <option value="rosenbrock">Rosenbrock Function</option>
+                                <option value="ackley">Ackley Function</option>
+                                <option value="griewank">Griewank Function</option>
+                            </select>
+                        </div>
+                        <div class="formula-display" id="formula">f(x) = Σ(xi²)</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-run" id="runBtn" onclick="runOptimization()">
+                            <span class="btn-icon">▶️</span>
+                            <span>Run Optimization</span>
+                        </button>
+                    </div>
+                    <div class="params-grid">
+                        <div class="control-group">
+                            <label class="control-label">
+                                <span class="label-icon">🎵</span>
+                                HMS
+                            </label>
+                            <input type="number" id="hms" value="5" min="3" max="50" class="input-field">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">
+                                <span class="label-icon">🎼</span>
+                                HMCR
+                            </label>
+                            <input type="number" id="hmcr" value="0.9" step="0.1" min="0" max="1" class="input-field">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">
+                                <span class="label-icon">🎹</span>
+                                PAR
+                            </label>
+                            <input type="number" id="par" value="0.3" step="0.1" min="0" max="1" class="input-field">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">
+                                <span class="label-icon">⏱️</span>
+                                Iterations
+                            </label>
+                            <input type="number" id="maxIterations" value="100" min="10" max="1000" class="input-field">
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">
+                                <span class="label-icon">📐</span>
+                                Dimensions
+                            </label>
+                            <input type="number" id="dimensions" value="2" min="2" max="10" class="input-field">
+                        </div>
+                    </div>
+
+                    
+                    <div class="demo-mode-toggle">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="demoMode" onchange="toggleDemoMode()">
+                            <span class="checkmark"></span>
+                            <span>Demo Mode (Fixed initial HMS Values)</span>
+                        </label>
+                        <p class="toggle-hint">
+                            Lock HMS to 5 and Dimensions to 2
+                        </p>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="results-dashboard">
+                <section class="algorithm-info-section glass-effect">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="panel-icon">🎼</span>
+                            About Harmony Search
+                        </h2>
+                    </div>
+                    
+                    <div class="algorithm-info">
+                        <p class="info-intro">
+                            Harmony Search is a metaheuristic optimization algorithm inspired by the improvisation process of jazz musicians. 
+                            Just as musicians improvise to find pleasing harmonies, the algorithm searches for optimal solutions by iteratively 
+                            refining a "harmony memory" of candidate solutions.
+                        </p>
+
+                        <div class="parameters-explanation">
+                            <div class="param-card">
+                                <div class="param-header">
+                                    <span class="param-icon">🎵</span>
+                                    <h4>HMS - Harmony Memory Size</h4>
+                                </div>
+                                <p>The number of solution vectors stored in memory. Like a band's repertoire, this defines how many "harmonies" (candidate solutions) are remembered and can be drawn upon during improvisation.</p>
+                            </div>
+
+                            <div class="param-card">
+                                <div class="param-header">
+                                    <span class="param-icon">🎼</span>
+                                    <h4>HMCR - Harmony Memory Considering Rate</h4>
+                                </div>
+                                <p>Probability (0-1) of choosing a value from the harmony memory versus generating a random value. Higher values mean more exploitation of existing good solutions; lower values encourage exploration of new possibilities.</p>
+                            </div>
+
+                            <div class="param-card">
+                                <div class="param-header">
+                                    <span class="param-icon">🎹</span>
+                                    <h4>PAR - Pitch Adjustment Rate</h4>
+                                </div>
+                                <p>Probability (0-1) of slightly modifying a chosen value from memory. Like a musician playing a variation on a theme, this parameter controls fine-tuning of solutions to explore nearby regions of the search space.</p>
+                            </div>
+                        </div>
+
+                        <div class="how-it-works">
+                            <h3>How It Works</h3>
+                            <ol class="process-list">
+                                <li><strong>Initialize:</strong> Create random solutions to fill the harmony memory</li>
+                                <li><strong>Improvise:</strong> Generate new solutions by either picking from memory (HMCR), adjusting values (PAR), or creating random values</li>
+                                <li><strong>Update:</strong> If the new solution is better than the worst in memory, replace it</li>
+                                <li><strong>Repeat:</strong> Continue improvising until reaching the maximum iterations or convergence</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="results-panel glass-effect">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="panel-icon">📊</span>
+                            Live Results
+                        </h2>
+                    </div>
+                    <div id="resultsContainer" class="results-content">
+                        <div class="empty-state">
+                            <div class="empty-icon">🎺</div>
+                            <h3>Ready to Optimize</h3>
+                            <p>Configure your parameters and click "Run Optimization"</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <section id="chartCard" class="chart-section glass-effect" style="display: none;">
+            <div class="panel-header">
+                <h2 class="panel-title">
+                    <span class="panel-icon">📈</span>
+                    Convergence Analysis
+                </h2>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="convergenceChart"></canvas>
+            </div>
+        </section>
+
+        <section id="functionVizCard" class="chart-section glass-effect" style="display: none;">
+            <div class="panel-header">
+                <h2 class="panel-title">
+                    <span class="panel-icon">🗺️</span>
+                    Function Landscape (2D)
+                </h2>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="functionChart"></canvas>
+            </div>
+        </section>
+
+        <section id="snapshotsCard" class="snapshots-section glass-effect" style="display: none;">
+            <div class="panel-header">
+                <h2 class="panel-title">
+                    <span class="panel-icon">🎵</span>
+                    Harmony Memory Evolution
+                </h2>
+            </div>
+            <div id="snapshotsContainer" class="snapshots-grid"></div>
+        </section>
+
+        <footer class="footer">
+            <p>Inspired by the improvisational process of jazz musicians 🎺</p>
+        </footer>
+    </div>
+    <audio id="backgroundMusic" src="HarmonySearch.mp3" loop volume="0.3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
