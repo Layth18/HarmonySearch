@@ -1,7 +1,3 @@
-Absolutely! Since your GitHub has a slightly different structure (with `photo/`, `video/`, and `demo/` folders), we can **adapt your README** to match your repo organization, emphasize the AI-generated media, and highlight the demo structure. Here's a revised version:
-
----
-
 # Harmony Search Optimization Demo
 
 ## Overview
